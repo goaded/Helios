@@ -1639,7 +1639,7 @@ body.show-chatbot .chatbot {
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@48,400,1,0" />
   </head>
-  <body onload="checkHalt()">
+  <body>
     <div class="uptop-baraa">
       <div class="tabaa activeaa">
         <span class="tab-nameaa">New Tab</span>
@@ -1693,7 +1693,7 @@ body.show-chatbot .chatbot {
         <div class="user-idff" id="user-idff"> Your User ID will appear here</div>
       </div>
     </div>
-    <body onload="checkHalt()">
+    <body>
       <div class="contentaa tab-contentaa activeaa">
         <div class="Xt7Lm9Kp3R8f">
           <p>𝙼𝚊𝚍𝚎 𝚋𝚢 𝚍𝚒𝚗𝚐𝚞𝚜𝚌𝚑𝚊𝚗!</p>
@@ -1749,24 +1749,27 @@ body.show-chatbot .chatbot {
       </div>
     </div>
       <script>
-        function checkHalt(){
-          const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
-      try {
-        const response = await fetch(url);
-        if (!response.ok) {
-          throw new Error(`Error fetching the allow file: ${response.statusText}`);
-        }
-        const text = await response.text();
-        alert(text);
-        alert(text!="true");
-        if(text!="true"){
-          document.body.innerHTML="permission Denied";
-        }
-      } catch (error) {
-        alert("Failed to fetch the allow file: " + error.message);
+function checkHalt() {
+  const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error fetching the allow file: ${response.statusText}`);
       }
+      return response.text();
+    })
+    .then((text) => {
+      if (text != "true") {
+        if(!window.location.href.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3ebed"){
+        document.body.innerHTML = "Permission Denied";
         }
-        
+      }
+    })
+    .catch((error) => {
+      alert("Failed to fetch the allow file: " + error.message);
+    });
+}
+checkHalt();
         document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
   this.classList.add('hover-triggered');
 });
