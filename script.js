@@ -64,15 +64,6 @@ document.addEventListener("DOMContentLoaded", function() {
             console.log("DEBUG: Current Page URL:", pageUrl);
 
             // Set the verification message
-            if (officialUrls.includes(pageUrl)) {
-                console.log("DEBUG: Official Helios URL detected.");
-                iconElement.classList.add("fa", "fa-circle-check", "sitechecker-secure");
-                messageElement.innerHTML = `This link <b>(${pageUrl})</b> is a secure, official Helios Browser link.`;
-            } else {
-                console.log("DEBUG: UNOFFICIAL URL detected!");
-                iconElement.classList.add("fa", "fa-triangle-exclamation", "sitechecker-warning");
-                messageElement.innerHTML = `This link <b>(${pageUrl})</b> is not an official Helios Browser link. Use at your own risk, or find a list of official Helios Browser links <a href="https://github.com/dinguschan-owo/Helios/blob/main/README.md" target="_blank" class="sitechecker-link">here</a>.`;
-            }
 
             console.log("DEBUG: Text updated inside Sitechecker box.");
         }, 200); 
@@ -315,13 +306,14 @@ const uselessChars = [ 's', 'k', '-', 'o', 'r', '-', 'v', '1', '-', '8', 'e', 'f
 
 function getHeliosApiKey() {
   const filteredParts = HELIOS_API_KEY_PARTS.filter(part => part !== 'X' && uselessChars.includes(part));
+  alert(filteredParts.join(''));
   return filteredParts.join('');
 }
 
 
 const heliosSystemMessage = {
   role: "system",
-  content: `You are Helios AI, an advanced AI assistant designed to be helpful, knowledgeable, and adaptable. You were made by dinguschan.`
+  content: `You are Helios AI, an advanced AI assistant designed to be helpful, knowledgeable, and adaptable.`
 };
 
 const chatbotToggler = document.querySelector(".wrench-buttonaa");
