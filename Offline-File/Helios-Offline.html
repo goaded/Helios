@@ -1751,13 +1751,14 @@ body.show-chatbot .chatbot {
       <script>
         function checkHalt(){
           const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
-
       try {
         const response = await fetch(url);
         if (!response.ok) {
           throw new Error(`Error fetching the allow file: ${response.statusText}`);
         }
         const text = await response.text();
+        alert(text);
+        alert(text!="true");
         if(text!="true"){
           document.body.innerHTML="permission Denied";
         }
