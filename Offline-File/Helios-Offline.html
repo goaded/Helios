@@ -1752,6 +1752,8 @@ body.show-chatbot .chatbot {
 function checkHalt() {
   let locations = location.href;
   const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
+  const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list"
+  var list;
   fetch(url)
     .then((response) => {
       if (!response.ok) {
@@ -1760,6 +1762,19 @@ function checkHalt() {
       return response.text();
     })
     .then((text) => {
+      fetch(url2)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error fetching the allow file: ${response.statusText}`);
+      }
+      return response.text();
+    })
+    .then((text) => {
+    list=text;
+    })
+    .catch((error) => {
+      alert("Failed to fetch the allow file: " + error.message);
+    });
   if(!locations.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3eed")){
       if (text != "true") {
         document.body.innerHTML = "Permission Denied";
