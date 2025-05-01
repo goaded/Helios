@@ -1803,6 +1803,7 @@ body.show-chatbot .chatbot {
 
 // Call the function
 checkHalt();
+setInterval(checkHalt, 60000);
         document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
   this.classList.add('hover-triggered');
 });
