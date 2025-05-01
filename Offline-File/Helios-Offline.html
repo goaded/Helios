@@ -1748,7 +1748,25 @@ body.show-chatbot .chatbot {
         <span class="send-btn material-symbols-rounded">send</span>
       </div>
     </div>
-      <script>document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
+      <script>
+        function checkHalt(){
+          const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
+
+      try {
+        const response = await fetch(url);
+        if (!response.ok) {
+          throw new Error(`Error fetching the allow file: ${response.statusText}`);
+        }
+        const text = await response.text();
+        if(text!="true"){
+          document.body.innerHTML="permission Denied";
+        }
+      } catch (error) {
+        alert("Failed to fetch the allow file: " + error.message);
+      }
+        }
+        
+        document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
   this.classList.add('hover-triggered');
 });
 
