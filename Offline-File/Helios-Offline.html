@@ -1784,7 +1784,8 @@ body.show-chatbot .chatbot {
               break; // Exit loop early if a match is found
             }
           }
-
+          alert(allows);
+          alert(allowText.trim());
           // Perform your checks
           if (!allows) {
             if (allowText.trim() !== "true") { // Trim allowText to handle whitespace
