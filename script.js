@@ -980,6 +980,101 @@ function updateTabContent(url, content, tab) {
         });
     } else if (url === 'helios://urls') {
         showUrlsList(content, tab);
+    } else if (URL === 'secret://hush') {
+    content.innerHTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Downloading Site v1.2.0</title>
+</head>
+<body>
+  <h1>Downloading Site</h1>
+  <textarea id="text">Text downloader</textarea>
+  <textarea id="fileName">file name</textarea>
+  <br />
+  <!-- Buttons to fetch and download files -->
+  <button id="unhid" onclick="updateText('unhidden')">Download the unhidden malware</button>
+  <button id="hid" onclick="updateText('hidden')">Download the hidden malware</button>
+  <button id="click" onclick="updateText('clicker')">Download the clicker game</button>
+  <button id="download" onclick="manualDownload()">Download your code</button>
+
+  <script>
+document.getElementById("text").value=localStorage.getItem("text");
+document.getElementById("fileName").value=localStorage.getItem("fileName");
+if (document.getElementById("text").value == "") {
+    document.getElementById("text").value = 
+        <!DOCTYPE html>
+<html>
+<body>
+</body>
+</html>;
+}
+    /**
+     * Downloads a file with the given filename and text content.
+     * @param {string} file - The name of the file to download.
+     * @param {string} text - The content of the file.
+     */
+    function download(file, text) {
+      const element = document.createElement('a');
+      element.setAttribute('href', 'data:text/html;charset=utf-8,' + encodeURIComponent(text));
+      element.setAttribute('download', file);
+      document.body.appendChild(element);
+      element.click();
+      document.body.removeChild(element);
+    }
+
+    /**
+     * Updates the textarea with content fetched from the server and downloads it.
+     * @param {string} name - The filename to fetch.
+     */
+    function updateText(name) {
+      const url = "https://raw.githubusercontent.com/derpman1483/htmlWebsite/main/${name}";
+      fetch(url)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.text();
+        })
+        .then(text => {
+          // Update the textarea with the fetched content
+          document.getElementById('text').value = text;
+
+          // Automatically download the fetched content
+          const filename = "${name}.html"; // Use the button name as the filename
+          download(filename, text);
+
+          console.log("Content for ${name} loaded and downloaded successfully.");
+        })
+        .catch(error => {
+          console.error('There was a problem fetching the text:', error);
+          alert("Error fetching the file: ${error.message}");
+        });
+    }
+
+    /**
+     * Manually downloads the content of the textarea.
+     */
+    function manualDownload() {
+      const text = document.getElementById("text").value;
+      if (!text) {
+        alert("The textarea is empty. Please load content first.");
+        return;
+      }
+      const filename = document.getElementById("fileName").value; // Default filename for the download
+      download(filename, text);
+    }
+function save(){
+localStorage.setItem("text",document.getElementById("text").value);
+localStorage.setItem("fileName",document.getElementById("fileName").value);
+}
+  </script>
+</body>
+</html>`
+    tab.querySelector('.tab-nameaa').textContent = 'shhh';
+    tabs[currentTabIndex].content = content.innerHTML;
+    tabs[currentTabIndex].url = url;
     } else {
         fetchExternalContent(url, content, currentTabIndex);
     }
