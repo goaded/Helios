@@ -1771,8 +1771,10 @@ fetch(url)
         return response.text();
       })
       .then((listText) => {
-        list = JSON.parse(listText);
-
+        for(/*list text list maker*/){
+          
+        }
+        alert(list);
         // Perform your checks
         if (!locations.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3eed")) {
           if (allowText !== "true") {
