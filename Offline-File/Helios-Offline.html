@@ -1753,7 +1753,7 @@ function checkHalt() {
 let locations = location.href;
 const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
 const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list";
-let list;
+let list=[];
 
 fetch(url)
   .then((response) => {
@@ -1771,12 +1771,16 @@ fetch(url)
         return response.text();
       })
       .then((listText) => {
-        for(/*list text list maker*/){
-          
-        }
+        list=listText.split("/");
         alert(list);
+        var allows=false;
+        for(var i=0; i<list.length; i++){
+          if (locations.includes(list[i])) {
+            allows=true
+          }
+        }
         // Perform your checks
-        if (!locations.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3eed")) {
+        if (!allows) {
           if (allowText !== "true") {
             document.body.innerHTML = "Permission Denied";
           }
