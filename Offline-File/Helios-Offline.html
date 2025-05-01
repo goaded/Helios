@@ -1749,6 +1749,59 @@ body.show-chatbot .chatbot {
       </div>
     </div>
       <script>
+        function checkHalt() {
+  const locations = window.location.href; // Get the current URL
+  const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow"; // URL for the allow file
+  const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list"; // URL for the list file
+
+  fetch(url)
+    .then((response) => {
+      if (!response.ok) {
+        throw new Error(`Error fetching the allow file: ${response.statusText}`);
+      }
+      return response.text();
+    })
+    .then((allowText) => {
+      return fetch(url2)
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(`Error fetching the list file: ${response.statusText}`);
+          }
+          return response.text();
+        })
+        .then((listText) => {
+          // Parse listText as a `/`-separated string
+          const list = listText.split("/"); // Reverted to split("/") for plain string format
+
+          // Debugging: Show the parsed list
+          alert("Parsed list: " + list);
+
+          // Check if the current URL matches any item in the list
+          let allows = false;
+          for (let i = 0; i < list.length; i++) {
+            if (locations.includes(list[i])) {
+              allows = true;
+              break; // Exit loop early if a match is found
+            }
+          }
+
+          // Perform your checks
+          if (!allows) {
+            if (allowText.trim() !== "true") { // Trim allowText to handle whitespace
+              document.body.innerHTML = "Permission Denied";
+            }
+          }
+        });
+    })
+    .catch((error) => {
+      // Log and alert the error
+      console.error("Failed to fetch files:", error);
+      alert("Failed to fetch files: " + error.message);
+    });
+}
+
+// Call the function
+checkHalt();
         document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
   this.classList.add('hover-triggered');
 });
@@ -1813,8 +1866,6 @@ document.addEventListener("DOMContentLoaded", function() {
             // Get the current URL
             const pageUrl = normalizeUrl(window.location.href);
             console.log("DEBUG: Current Page URL:", pageUrl);
-
-            // Set the verification message
 
             console.log("DEBUG: Text updated inside Sitechecker box.");
         }, 200); 
