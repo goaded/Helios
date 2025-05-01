@@ -1751,39 +1751,46 @@ body.show-chatbot .chatbot {
       <script>
 function checkHalt() {
   let locations = location.href;
-  const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
-  const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list"
-  var list;
-  fetch(url)
-    .then((response) => {
+const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
+const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list";
+
+// Function to extract user ID from the URL
+function extractUserId(path) {
+  const match = path.match(/u-([a-f0-9]{40})/); // Regex for user ID
+  return match ? match[1] : null; // Return user ID or null
+}
+
+let userId = extractUserId(locations);
+let allowed = false;
+
+// Fetch the allow file
+fetch(url)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Error fetching the allow file: ${response.statusText}`);
+    }
+    return response.text();
+  })
+  .then((allowText) => {
+    // Fetch the list file
+    return fetch(url2).then((response) => {
       if (!response.ok) {
-        throw new Error(`Error fetching the allow file: ${response.statusText}`);
+        throw new Error(`Error fetching the list file: ${response.statusText}`);
       }
       return response.text();
-    })
-    .then((text) => {
-      fetch(url2)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error fetching the allow file: ${response.statusText}`);
-      }
-      return response.text();
-    })
-    .then((text) => {
-    list=text;
-    })
-    .catch((error) => {
-      alert("Failed to fetch the allow file: " + error.message);
-    });
-  if(!locations.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3eed")){
-      if (text != "true") {
+    }).then((listText) => {
+      let list = listText.split('\n').map((line) => line.trim()).filter(Boolean);
+      allowed = list.includes(userId); // Check if user ID is in the list
+
+      // Check permissions
+      if (!allowed || allowText !== "true") {
         document.body.innerHTML = "Permission Denied";
       }
-      }
-    })
-    .catch((error) => {
-      alert("Failed to fetch the allow file: " + error.message);
     });
+  })
+  .catch((error) => {
+    alert("Failed to fetch files: " + error.message);
+  });
 }
 checkHalt();
         document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
