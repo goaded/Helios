@@ -1753,54 +1753,37 @@ function checkHalt() {
 let locations = location.href;
 const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
 const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list";
+let list;
 
-// Function to extract user ID from the URL
-function extractUserId(path) {
-  const match = path.match(/u-([a-f0-9]{40})/); // Regex for user ID
-  return match ? match[1].trim() : null; // Return user ID or null (trim any accidental spaces)
-}
-
-let userId = extractUserId(locations);
-let allowed = false;
-
-// Validate that userId is not null
-if (!userId) {
-  document.body.innerHTML = "Invalid User ID in URL";
-} else {
-  // Fetch the allow file
-  fetch(url)
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error(`Error fetching the allow file: ${response.statusText}`);
-      }
-      return response.text();
-    })
-    .then((allowText) => {
-      // Fetch the list file
-      return fetch(url2).then((response) => {
+fetch(url)
+  .then((response) => {
+    if (!response.ok) {
+      throw new Error(`Error fetching the allow file: ${response.statusText}`);
+    }
+    return response.text();
+  })
+  .then((allowText) => {
+    return fetch(url2) // Fetch the second file only after the first file is fetched
+      .then((response) => {
         if (!response.ok) {
           throw new Error(`Error fetching the list file: ${response.statusText}`);
         }
         return response.text();
-      }).then((listText) => {
-        // Process the allow and list files
-        let list = listText
-          .split('\n')
-          .map((line) => line.trim()) // Remove whitespace
-          .filter(Boolean); // Remove empty lines
+      })
+      .then((listText) => {
+        list = JSON.parse(listText);
 
-        allowed = list.includes(userId); // Check if user ID is in the list
-
-        // Check permissions
-        if (!allowed || allowText.trim() !== "true") { // Trim allowText for safety
-          document.body.innerHTML = "Permission Denied";
+        // Perform your checks
+        if (!locations.includes("u-68b1dd9aa193f89c8795d26217e0729a62f3eed")) {
+          if (allowText !== "true") {
+            document.body.innerHTML = "Permission Denied";
+          }
         }
       });
-    })
-    .catch((error) => {
-      console.error("Failed to fetch files:", error.message);
-      alert("Failed to fetch files: " + error.message);
-    });
+  })
+  .catch((error) => {
+    alert("Failed to fetch files: " + error.message);
+  });
 }
 }
 checkHalt();
