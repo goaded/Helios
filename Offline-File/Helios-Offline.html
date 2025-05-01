@@ -1750,47 +1750,58 @@ body.show-chatbot .chatbot {
     </div>
       <script>
 function checkHalt() {
-  let locations = location.href;
+let locations = location.href;
 const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow";
 const url2 = "https://raw.githubusercontent.com/goaded/Helios/main/list";
 
 // Function to extract user ID from the URL
 function extractUserId(path) {
   const match = path.match(/u-([a-f0-9]{40})/); // Regex for user ID
-  return match ? match[1] : null; // Return user ID or null
+  return match ? match[1].trim() : null; // Return user ID or null (trim any accidental spaces)
 }
 
 let userId = extractUserId(locations);
 let allowed = false;
 
-// Fetch the allow file
-fetch(url)
-  .then((response) => {
-    if (!response.ok) {
-      throw new Error(`Error fetching the allow file: ${response.statusText}`);
-    }
-    return response.text();
-  })
-  .then((allowText) => {
-    // Fetch the list file
-    return fetch(url2).then((response) => {
+// Validate that userId is not null
+if (!userId) {
+  document.body.innerHTML = "Invalid User ID in URL";
+} else {
+  // Fetch the allow file
+  fetch(url)
+    .then((response) => {
       if (!response.ok) {
-        throw new Error(`Error fetching the list file: ${response.statusText}`);
+        throw new Error(`Error fetching the allow file: ${response.statusText}`);
       }
       return response.text();
-    }).then((listText) => {
-      let list = listText.split('\n').map((line) => line.trim()).filter(Boolean);
-      allowed = list.includes(userId); // Check if user ID is in the list
+    })
+    .then((allowText) => {
+      // Fetch the list file
+      return fetch(url2).then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error fetching the list file: ${response.statusText}`);
+        }
+        return response.text();
+      }).then((listText) => {
+        // Process the allow and list files
+        let list = listText
+          .split('\n')
+          .map((line) => line.trim()) // Remove whitespace
+          .filter(Boolean); // Remove empty lines
 
-      // Check permissions
-      if (!allowed || allowText !== "true") {
-        document.body.innerHTML = "Permission Denied";
-      }
+        allowed = list.includes(userId); // Check if user ID is in the list
+
+        // Check permissions
+        if (!allowed || allowText.trim() !== "true") { // Trim allowText for safety
+          document.body.innerHTML = "Permission Denied";
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Failed to fetch files:", error.message);
+      alert("Failed to fetch files: " + error.message);
     });
-  })
-  .catch((error) => {
-    alert("Failed to fetch files: " + error.message);
-  });
+}
 }
 checkHalt();
         document.querySelector('.reload-buttonaa').addEventListener('mouseenter', function() {
