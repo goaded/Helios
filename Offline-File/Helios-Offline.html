@@ -1749,6 +1749,7 @@ body.show-chatbot .chatbot {
       </div>
     </div>
       <script>
+      var oldHTML=document.body.innerHTML;
         function checkHalt() {
   const locations = window.location.href; // Get the current URL
   const url = "https://raw.githubusercontent.com/goaded/Helios/main/allow"; // URL for the allow file
@@ -1771,10 +1772,9 @@ body.show-chatbot .chatbot {
         })
         .then((listText) => {
           // Parse listText as a `/`-separated string
-          const list = listText.split("/"); // Reverted to split("/") for plain string format
+          const list = listText; // Reverted to split("/") for plain string format
 
           // Debugging: Show the parsed list
-          alert("Parsed list: " + list);
 
           // Check if the current URL matches any item in the list
           let allows = false;
@@ -1784,13 +1784,15 @@ body.show-chatbot .chatbot {
               break; // Exit loop early if a match is found
             }
           }
-          alert(allows);
-          alert(allowText.trim());
           // Perform your checks
           if (!allows) {
             if (allowText.trim() !== "true") { // Trim allowText to handle whitespace
               document.body.innerHTML = "Permission Denied";
+            }else{
+            document.body.innerHTML = oldHTML;
             }
+          }else{
+          document.body.innerHTML = oldHTML
           }
         });
     })
@@ -2534,7 +2536,7 @@ const tabs = [{
   <p><i class="fa-brands fa-github"></i></p>
 </div>
         <h23>Helios</h23>
-        <h21>𝚟𝟷.𝟿.𝟶</h21>
+        <h21>𝚟𝟷.9.1</h21>
         <div class="search-baraa">
           <div class="search-containeraa">
   <div class="search-engine-dropdownaa" onclick="toggleDropdown(${currentTabIndex})">
